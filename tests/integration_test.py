@@ -1,5 +1,5 @@
-from src.translator.main import say_hi_trans
 from src.emulator.main import say_hi_em
+from src.translator.main import say_hi_trans
 
 
 def test_ci() -> None:
