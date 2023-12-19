@@ -11,7 +11,7 @@ EMULATOR = src/emulator/main.py
 test:
 	$(POETRY) $(COVERAGE) run -m $(TEST)
 
-coverage:
+coverage: test
 	$(POETRY) $(COVERAGE) report -m
 
 lint:
@@ -22,3 +22,6 @@ translator:
 
 emulator:
 	$(PYTHON) $(EMULATOR)
+
+update-golden:
+	$(POETRY) $(COVERAGE) run -m $(TEST) --update-goldens
