@@ -1,0 +1,37 @@
+program: expression+
+
+?expression : atomic
+           | if_expression
+           | invokable
+        //   | "(" expression expression* ")"
+
+atomic : symbol
+       | integer
+       | string
+
+
+invokable : "(" control args ")"
+args : expression*
+
+
+if_expression : "(" "if" condition if_body ")"
+condition : expression
+if_body : expression
+
+!control : "=="
+        | "-"
+        | "+"
+        | "%"
+        | "set"
+        | "read"
+        | "print"
+
+symbol : NAME
+integer : SIGN? DEC_NUMBER
+string : STRING
+
+SIGN : "-" | "+"
+
+%import python (NAME, STRING, DEC_NUMBER)
+%import common (WS)
+%ignore WS
