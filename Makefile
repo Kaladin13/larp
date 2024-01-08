@@ -1,7 +1,7 @@
 POETRY = poetry run
 TEST = pytest --verbose
 COVERAGE = coverage
-LINT = ruff check --fix .
+LINT = ruff check --fix --unsafe-fixes .
 
 PYTHON = python3.10
 
