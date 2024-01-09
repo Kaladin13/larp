@@ -137,7 +137,7 @@ class IfExpression(_Expression, WithMeta):
     meta: Meta
     condition: Condition
     if_body: IfBody
-    else_body: ElseBody
+    else_body: ElseBody = None
 
     def else_clause(self):
         cg.add_instruction(Opcode.POP, cg.AC_REGISTER)

@@ -7,7 +7,7 @@ def say_hi_trans() -> None:
 
 if __name__ == "__main__":
     text = """
-        (if (== 1 a) b 12)
+        (if (== 1 a) b)
     """
 
     tree = parse_program(text)
