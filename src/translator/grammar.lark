@@ -14,9 +14,10 @@ invokable : "(" control args ")"
 args : expression*
 
 
-if_expression : "(" "if" condition if_body ")"
+if_expression : "(" "if" condition if_body else_body? ")"
 condition : expression
 if_body : expression
+else_body : expression
 
 !control : "=="
         | "-"

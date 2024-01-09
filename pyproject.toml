@@ -104,7 +104,8 @@ ignore = [
     "F404",
     "F405",
     "T203",
-    "RUF012"
+    "RUF012",
+    "C901"
 ]
 unfixable = [
     "ERA001", # prohibit to "auto-fix" (=remove) commented-out code

@@ -120,15 +120,86 @@ class IfBody(_Ast, WithMeta):
 
 
 @dataclass
+class ElseBody(_Ast, WithMeta):
+    meta: Meta
+    expression: _Expression
+
+    def codegen(self) -> None:
+        self.expression.codegen()
+
+
+def nop():
+    cg.add_instruction(Opcode.CMP, cg.SP_REGISTER, cg.SP_REGISTER)
+
+
+@dataclass
 class IfExpression(_Expression, WithMeta):
     meta: Meta
     condition: Condition
     if_body: IfBody
+    else_body: ElseBody
+
+    def else_clause(self):
+        cg.add_instruction(Opcode.POP, cg.AC_REGISTER)
+        # get zero for comparison
+        cg.add_instruction(Opcode.SUB, cg.S_REGISTER_1, cg.S_REGISTER_1)
+        cg.add_instruction(Opcode.CMP, cg.AC_REGISTER, cg.S_REGISTER_1)
+        # hack to invert ac register
+        cg.add_instruction(Opcode.JZ, address=len(cg.instructions)+2)
+        cg.add_instruction(Opcode.JMP, address=len(cg.instructions)+2)
+        cg.add_instruction(Opcode.CMP, cg.AC_REGISTER, cg.AC_REGISTER)
 
     def codegen(self) -> None:
-        print("If {} then {}"
-              .format(self.condition.codegen(),
-                      self.if_body.codegen()))
+        save()
+        self.condition.codegen()
+
+        if self.condition.expression.__class__ in [_Integer, String, Symbol]:
+            cg.add_instruction(Opcode.CMP, cg.AC_REGISTER, cg.AC_REGISTER)
+        else:
+            self.else_clause()
+        # if ac_reg == 1 then body, else take jump
+        cg.add_instruction(Opcode.JZ, address=-1)
+        jump_inst_address = len(cg.instructions) - 1
+
+        self.if_body.codegen()
+        if self.if_body.expression.__class__ in [_Integer, String]:
+            cg.add_instruction(Opcode.LDR, cg.SP_REGISTER,
+                               address=cg.data_pointer)
+        elif self.if_body.expression.__class__ == Symbol:
+            cg.add_instruction(Opcode.MOV, cg.SP_REGISTER,
+                               cg.variable_register)
+        else:
+            cg.add_instruction(Opcode.POP, cg.SP_REGISTER)
+        load()
+        cg.add_instruction(Opcode.PUSH, cg.SP_REGISTER)
+
+        sec_jump_addr: int
+
+        if self.else_body is not None:
+            cg.add_instruction(Opcode.JMP, address=-1)
+            sec_jump_addr = len(cg.instructions) - 1
+
+        cg.instructions[jump_inst_address]["address"] = len(cg.instructions)
+
+        nop()
+
+        if self.else_body is not None:
+            self.else_body.codegen()
+
+            if self.else_body.expression.__class__ in [_Integer, String]:
+                cg.add_instruction(Opcode.LDR, cg.SP_REGISTER,
+                                   address=cg.data_pointer)
+            elif self.else_body.expression.__class__ == Symbol:
+                cg.add_instruction(Opcode.MOV, cg.SP_REGISTER,
+                                   cg.variable_register)
+            else:
+                cg.add_instruction(Opcode.POP, cg.SP_REGISTER)
+            load()
+            cg.add_instruction(Opcode.PUSH, cg.SP_REGISTER)
+
+            cg.instructions[sec_jump_addr]["address"] = len(cg.instructions)
+
+        nop()
 
 
 class LarkToASTTransformer(Transformer):
@@ -238,7 +309,7 @@ def handle_string(sym=False):
     cg.add_instruction(Opcode.ADD, cg.S_REGISTER_2, cg.AC_REGISTER)
     cg.add_instruction(Opcode.JMP, address=(len(cg.instructions) - 6))
 
-    cg.add_instruction(Opcode.CMP, cg.AC_REGISTER, cg.AC_REGISTER)
+    nop()
 
 
 def control_print(control: Control, args: Args):
