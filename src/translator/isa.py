@@ -7,6 +7,7 @@ from typing import Optional
 class Opcode(str, Enum):
     LDR = "load"
     STR = "store"
+    ILDR = "load from reg"
     ADD = "add"
     SUB = "substract"
     MOD = "mod"
@@ -46,9 +47,9 @@ class Codegen(ABC):
     variable_register: str
     data_pointer: int
     NAMED_DATA_OFFSET: int = 128
-    registers: list[bool] = [False for i in range(1, 9)]
+    registers: list[int] = [0 for i in range(1, 9)]
     AC_REGISTER, S_REGISTER_1, S_REGISTER_2, SP_REGISTER = 10, 11, 12, 13
-    CONTROL_BIT_MAPPING, INPUT_MAPPING = 512, 513
+    CONTROL_BIT_MAPPING, INPUT_MAPPING, OUTPUT_MAPPING = 512, 513, 514
     dynamic_str_ptr: int = 256
     variables: dict = {}
 
@@ -59,8 +60,8 @@ class Codegen(ABC):
     def find_variable_reg(self, name: str):
         if name not in self.variables:
             for num, reg in enumerate(self.registers):
-                if not reg:
-                    self.registers[num] = True
+                if reg == 0:
+                    self.registers[num] = 1
                     self.variables[name] = {
                         "value": "uninitialized", "register": num}
                     self.variable_register = num
@@ -104,7 +105,7 @@ class Codegen(ABC):
         print("Instruction memory")
 
         for num, ins in enumerate(self.instructions):
-            print("{}: {} {} {}".format(num, ins["opcode"].name, ins["reg1"],
+            print("{}: {} r{} {}".format(num, ins["opcode"].name, ins["reg1"],
                   ins["address"] if ins["reg2"] is None else ins["reg2"]).replace("None", ""))
 
         print("Data memory")

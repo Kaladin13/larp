@@ -2,10 +2,11 @@ import sys
 from abc import ABC
 from dataclasses import dataclass
 
-from .isa import ControlEnum, Opcode, cg, operator_bindings
 from lark import Lark, Token, Transformer, v_args
 from lark.ast_utils import AsList, Ast, WithMeta, create_transformer
 from lark.tree import Meta
+
+from .isa import ControlEnum, Opcode, cg, operator_bindings
 
 this_module = sys.modules[__name__]
 
@@ -94,6 +95,8 @@ class Invokable(_Expression, WithMeta):
                 control_set(self.control, self.args)
             case ControlEnum.READ:
                 control_read(self.control, self.args)
+            case ControlEnum.PRINT:
+                control_print(self.control, self.args)
             case _:
                 control_bin_ops(self.control, self.args)
 
@@ -208,15 +211,87 @@ def control_read(control: Control, args: Args):
     cg.add_instruction(Opcode.PUSH, cg.SP_REGISTER)
 
 
+def handle_int(sym=False):
+    if not sym:
+        cg.add_instruction(Opcode.LDR, cg.AC_REGISTER,
+                           address=cg.data_pointer)
+    else:
+        cg.add_instruction(Opcode.MOV, cg.AC_REGISTER,
+                           cg.variable_register)
+    cg.add_instruction(Opcode.STR, cg.AC_REGISTER, cg.S_REGISTER_1)
+
+
+def handle_string(sym=False):
+    if not sym:
+        cg.add_instruction(Opcode.LDR, cg.S_REGISTER_2,
+                           address=cg.data_pointer)
+    else:
+        cg.add_instruction(Opcode.MOV, cg.S_REGISTER_2,
+                           cg.variable_register)
+    cg.add_instruction(Opcode.ILDR, cg.AC_REGISTER, reg2=cg.S_REGISTER_2)
+    cg.add_instruction(Opcode.CMP, cg.AC_REGISTER, cg.SP_REGISTER)
+    # if [new_char] == STOP_SYM then jump
+    cg.add_instruction(Opcode.JZ, address=(len(cg.instructions) + 2))
+    cg.add_instruction(Opcode.JMP, address=(len(cg.instructions) + 4))
+
+    cg.add_instruction(Opcode.CMP, cg.AC_REGISTER, cg.AC_REGISTER)
+    cg.add_instruction(Opcode.ADD, cg.S_REGISTER_2, cg.AC_REGISTER)
+    cg.add_instruction(Opcode.JMP, address=(len(cg.instructions) - 6))
+
+    cg.add_instruction(Opcode.CMP, cg.AC_REGISTER, cg.AC_REGISTER)
+
+
+def control_print(control: Control, args: Args):
+    assert len(args.expressions) == 1
+    save()
+    [exp] = args.expressions
+
+    cg.add_named_memory(cg.OUTPUT_MAPPING)
+    cg.add_instruction(Opcode.LDR, cg.S_REGISTER_1, address=cg.data_pointer)
+
+    cg.add_named_memory(String.STOP_SYM)
+    cg.add_instruction(Opcode.LDR, cg.SP_REGISTER, address=cg.data_pointer)
+
+    exp.codegen()
+
+    if exp.__class__ == _Integer:
+        handle_int()
+    elif exp.__class__ == String:
+        handle_string()
+    elif exp.__class__ == Symbol:
+        if cg.registers[cg.variable_register] == 2:
+            handle_string(True)
+        else:
+            handle_int(True)
+
+    load()
+
+
 def control_set(control: Control, args: Args):
     assert len(args.expressions) == 2
     assert args.expressions[0].__class__ == Symbol
+    [arg1, arg2] = args.expressions
 
-    # TODO: change to s-form
-    [i.codegen() for i in reversed(args.expressions)]
-    cg.add_instruction(Opcode.LDR,
-                       cg.variable_register,
-                       address=cg.data_pointer)
+    arg2.codegen()
+    reg2: int
+
+    if arg2.__class__ == _Integer or arg2.__class__ == String:
+        arg1.codegen()
+        cg.add_instruction(Opcode.LDR,
+                           cg.variable_register,
+                           address=cg.data_pointer)
+        if arg2.__class__ == String:
+            cg.registers[cg.variable_register] = 2
+    elif arg2.__class__ == Symbol:
+        reg2 = cg.variable_register
+        arg1.codegen()
+        cg.add_instruction(Opcode.MOV, reg2,
+                           reg2=cg.variable_register)
+        cg.registers[reg2] = cg.registers[cg.variable_register]
+    else:
+        arg1.codegen()
+        cg.add_instruction(Opcode.POP, cg.variable_register)
+        cg.registers[cg.variable_register] = 2
 
 
 def control_bin_ops(control: Control, args: Args):
