@@ -47,7 +47,9 @@ class Codegen(ABC):
     data_pointer: int
     NAMED_DATA_OFFSET: int = 128
     registers: list[bool] = [False for i in range(1, 9)]
-    AC_REGISTER, S_REGISTER_1, S_REGISTER_2 = 10, 11, 12
+    AC_REGISTER, S_REGISTER_1, S_REGISTER_2, SP_REGISTER = 10, 11, 12, 13
+    CONTROL_BIT_MAPPING, INPUT_MAPPING = 512, 513
+    dynamic_str_ptr: int = 256
     variables: dict = {}
 
     instructions: list[dict] = []
@@ -100,7 +102,11 @@ class Codegen(ABC):
         # self.named_data_memory = first_array + padding + second_array # noqa: ERA001
         self.named_data_memory = first_array + second_array
         print("Instruction memory")
-        pprint(self.instructions)
+
+        for num, ins in enumerate(self.instructions):
+            print("{}: {} {} {}".format(num, ins["opcode"].name, ins["reg1"],
+                  ins["address"] if ins["reg2"] is None else ins["reg2"]).replace("None", ""))
+
         print("Data memory")
         pprint(self.named_data_memory)
 

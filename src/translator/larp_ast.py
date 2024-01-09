@@ -2,11 +2,10 @@ import sys
 from abc import ABC
 from dataclasses import dataclass
 
+from .isa import ControlEnum, Opcode, cg, operator_bindings
 from lark import Lark, Token, Transformer, v_args
 from lark.ast_utils import AsList, Ast, WithMeta, create_transformer
 from lark.tree import Meta
-
-from .isa import ControlEnum, Opcode, cg, operator_bindings
 
 this_module = sys.modules[__name__]
 
@@ -172,13 +171,48 @@ def load():
 
 
 def control_read(control: Control, args: Args):
+    # we don't expect arguments
     assert len(args.expressions) == 0
+    save()
+
+    # add stop sym to named memory as word, save in reg
+    cg.add_named_memory(String.STOP_SYM)
+    cg.add_instruction(Opcode.LDR, cg.S_REGISTER_2, address=cg.data_pointer)
+
+    cg.add_named_memory(cg.dynamic_str_ptr)
+    # save the start of the input string
+    str_start = cg.data_pointer
+    cg.add_instruction(Opcode.LDR, cg.S_REGISTER_1, address=str_start)
+
+    cg.add_instruction(Opcode.LDR, cg.AC_REGISTER,
+                       address=cg.CONTROL_BIT_MAPPING)
+
+    # if ac_reg == 0 then jump
+    cg.add_instruction(Opcode.JZ, cg.AC_REGISTER,
+                       address=len(cg.instructions) + 6)
+
+    cg.add_instruction(Opcode.LDR, cg.AC_REGISTER, address=cg.INPUT_MAPPING)
+    cg.add_instruction(Opcode.STR, cg.AC_REGISTER, cg.S_REGISTER_1)
+
+    # 1 -> ac_reg, s_reg1 += 1
+    cg.add_instruction(Opcode.CMP, cg.AC_REGISTER, cg.AC_REGISTER)
+    cg.add_instruction(Opcode.ADD, cg.S_REGISTER_1, cg.AC_REGISTER)
+    # jump to start of input cycle
+    cg.add_instruction(Opcode.JMP, address=(len(cg.instructions) - 6))
+    # 0x00 -> [s_reg1] -> str_end
+    cg.add_instruction(Opcode.STR, cg.S_REGISTER_2, cg.S_REGISTER_1)
+    cg.dynamic_str_ptr += 32
+
+    load()
+    cg.add_instruction(Opcode.LDR, cg.SP_REGISTER, address=str_start)
+    cg.add_instruction(Opcode.PUSH, cg.SP_REGISTER)
 
 
 def control_set(control: Control, args: Args):
     assert len(args.expressions) == 2
     assert args.expressions[0].__class__ == Symbol
 
+    # TODO: change to s-form
     [i.codegen() for i in reversed(args.expressions)]
     cg.add_instruction(Opcode.LDR,
                        cg.variable_register,
@@ -222,9 +256,10 @@ def control_bin_ops(control: Control, args: Args):
     binary_opcode: Opcode = operator_bindings[control.control]
 
     cg.add_instruction(binary_opcode, reg1, reg2=reg2)
+    cg.add_instruction(Opcode.MOV, cg.SP_REGISTER, reg1)
     load()
     # push result to stack
-    cg.add_instruction(Opcode.PUSH, reg1)
+    cg.add_instruction(Opcode.PUSH, cg.SP_REGISTER)
 
 
 parser = Lark.open("grammar.lark", rel_to=__file__, start="program")
