@@ -1,5 +1,4 @@
 from abc import ABC
-from enum import Enum
 from pprint import pprint
 
 from src.config.config import IOMemoryMapping, Opcode
@@ -19,9 +18,9 @@ class ControlUnit(ABC):
     instructions: list[dict]
     data: list[dict]
 
-    def __init__(self, inst_data, mem_data, input) -> None:
+    def __init__(self, inst_data, mem_data, input_bg) -> None:
         self.instructions = inst_data
-        self.io = IO(input)
+        self.io = IO(input_bg)
 
         long_data = []
         for i in range(1024):
@@ -88,8 +87,7 @@ class ControlUnit(ABC):
 
     def stat(self):
         print("Output buffer:")
-        # print(self.io.output_buffer)
-        print(''.join(str(x)
+        print("".join(str(x)
               for x in self.io.output_buffer).replace("0x00", "\n"))
         print("\nLeft input buffer")
         pprint(self.io.input_buffer)

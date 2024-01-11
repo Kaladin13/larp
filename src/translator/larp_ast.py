@@ -5,7 +5,6 @@ from dataclasses import dataclass
 from lark import Lark, Token, Transformer, v_args
 from lark.ast_utils import AsList, Ast, WithMeta, create_transformer
 from lark.tree import Meta
-
 from src.config.config import IOMemoryMapping
 
 from .isa import ControlEnum, Opcode, cg, operator_bindings

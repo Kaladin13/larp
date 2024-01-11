@@ -1,5 +1,4 @@
 import json
-from pprint import pprint
 import sys
 from pathlib import Path
 
@@ -10,15 +9,13 @@ def say_hi_em() -> None:
     print("Hello dear emulator!")
 
 
-def parse_input(input, buffer):
-    conf = json.load(input)
+def parse_input(input_fl, buffer):
+    conf = json.load(input_fl)
     buf = json.load(buffer)
 
-    cpu = ControlUnit(conf["instruction_memory"],
-                      conf["data_memory"],
-                      buf)
-
-    return cpu
+    return ControlUnit(conf["instruction_memory"],
+                       conf["data_memory"],
+                       buf)
 
 
 if __name__ == "__main__":
@@ -36,4 +33,3 @@ if __name__ == "__main__":
             with open(sys.argv[3], "w", encoding="utf-8") as output:
                 cpu = parse_input(file, buffer)
                 cpu.start()
-                # json.dump(res, output, indent=2)
