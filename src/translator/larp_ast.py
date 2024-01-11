@@ -2,10 +2,11 @@ import sys
 from abc import ABC
 from dataclasses import dataclass
 
-from .isa import ControlEnum, Opcode, cg, operator_bindings
 from lark import Lark, Token, Transformer, v_args
 from lark.ast_utils import AsList, Ast, WithMeta, create_transformer
 from lark.tree import Meta
+
+from .isa import ControlEnum, Opcode, cg, operator_bindings
 
 this_module = sys.modules[__name__]
 
@@ -27,7 +28,7 @@ class Program(_Ast, AsList, WithMeta):
     def codegen(self) -> None:
         cg.add_instruction(Opcode.JMP, address=-1)
         [x.codegen() for x in self.expressions]
-        cg.stat()
+        return cg.stat()
 
 
 class _Atomic(_Expression):
@@ -216,7 +217,7 @@ class IfExpression(_Expression, WithMeta):
             cg.add_instruction(Opcode.JMP, address=-1)
             sec_jump_addr = cg.get_ip() - 1
 
-            cg.instructions[jump_inst_address]["address"] = cg.get_ip()
+        cg.instructions[jump_inst_address]["address"] = cg.get_ip()
 
         nop()
 

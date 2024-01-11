@@ -1,0 +1,136 @@
+input: |-
+  (set a (read))
+  (print a)
+
+output:
+  instruction_memory:
+  - opcode: JMP
+    address: 1
+    index: 0
+  - opcode: PUSH
+    reg1: 11
+    index: 1
+  - opcode: PUSH
+    reg1: 12
+    index: 2
+  - opcode: PUSH
+    reg1: 10
+    index: 3
+  - opcode: LDR
+    reg1: 12
+    address: 0
+    index: 4
+  - opcode: LDR
+    reg1: 11
+    address: 1
+    index: 5
+  - opcode: LDR
+    reg1: 10
+    address: 512
+    index: 6
+  - opcode: JZ
+    reg1: 10
+    address: 13
+    index: 7
+  - opcode: LDR
+    reg1: 10
+    address: 513
+    index: 8
+  - opcode: STR
+    reg1: 10
+    reg2: 11
+    index: 9
+  - opcode: CMP
+    reg1: 10
+    reg2: 10
+    index: 10
+  - opcode: ADD
+    reg1: 11
+    reg2: 10
+    index: 11
+  - opcode: JMP
+    address: 6
+    index: 12
+  - opcode: STR
+    reg1: 12
+    reg2: 11
+    index: 13
+  - opcode: POP
+    reg1: 11
+    index: 14
+  - opcode: POP
+    reg1: 12
+    index: 15
+  - opcode: POP
+    reg1: 10
+    index: 16
+  - opcode: LDR
+    reg1: 13
+    address: 1
+    index: 17
+  - opcode: PUSH
+    reg1: 13
+    index: 18
+  - opcode: POP
+    reg1: 0
+    index: 19
+  - opcode: PUSH
+    reg1: 11
+    index: 20
+  - opcode: PUSH
+    reg1: 12
+    index: 21
+  - opcode: PUSH
+    reg1: 10
+    index: 22
+  - opcode: LDR
+    reg1: 11
+    address: 2
+    index: 23
+  - opcode: LDR
+    reg1: 13
+    address: 3
+    index: 24
+  - opcode: MOV
+    reg1: 12
+    reg2: 0
+    index: 25
+  - opcode: ILDR
+    reg1: 10
+    reg2: 12
+    index: 26
+  - opcode: CMP
+    reg1: 10
+    reg2: 13
+    index: 27
+  - opcode: JZ
+    address: 30
+    index: 28
+  - opcode: JMP
+    address: 33
+    index: 29
+  - opcode: CMP
+    reg1: 10
+    reg2: 10
+    index: 30
+  - opcode: ADD
+    reg1: 12
+    reg2: 10
+    index: 31
+  - opcode: JMP
+    address: 26
+    index: 32
+  - opcode: CMP
+    reg1: 13
+    reg2: 13
+    index: 33
+  - opcode: POP
+    reg1: 11
+    index: 34
+  - opcode: POP
+    reg1: 12
+    index: 35
+  - opcode: POP
+    reg1: 10
+    index: 36
+  data_memory: []

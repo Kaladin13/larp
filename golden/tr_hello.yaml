@@ -1,0 +1,241 @@
+input: |-
+  (set a "Hello world!")
+  (print a)
+
+output:
+  instruction_memory:
+  - opcode: JMP
+    address: 1
+    index: 0
+  - opcode: PUSH
+    reg1: 11
+    index: 1
+  - opcode: PUSH
+    reg1: 12
+    index: 2
+  - opcode: PUSH
+    reg1: 10
+    index: 3
+  - opcode: LDR
+    reg1: 12
+    address: 0
+    index: 4
+  - opcode: LDR
+    reg1: 11
+    address: 1
+    index: 5
+  - opcode: LDR
+    reg1: 10
+    address: 512
+    index: 6
+  - opcode: JZ
+    reg1: 10
+    address: 13
+    index: 7
+  - opcode: LDR
+    reg1: 10
+    address: 513
+    index: 8
+  - opcode: STR
+    reg1: 10
+    reg2: 11
+    index: 9
+  - opcode: CMP
+    reg1: 10
+    reg2: 10
+    index: 10
+  - opcode: ADD
+    reg1: 11
+    reg2: 10
+    index: 11
+  - opcode: JMP
+    address: 6
+    index: 12
+  - opcode: STR
+    reg1: 12
+    reg2: 11
+    index: 13
+  - opcode: POP
+    reg1: 11
+    index: 14
+  - opcode: POP
+    reg1: 12
+    index: 15
+  - opcode: POP
+    reg1: 10
+    index: 16
+  - opcode: LDR
+    reg1: 13
+    address: 1
+    index: 17
+  - opcode: PUSH
+    reg1: 13
+    index: 18
+  - opcode: POP
+    reg1: 0
+    index: 19
+  - opcode: PUSH
+    reg1: 11
+    index: 20
+  - opcode: PUSH
+    reg1: 12
+    index: 21
+  - opcode: PUSH
+    reg1: 10
+    index: 22
+  - opcode: LDR
+    reg1: 11
+    address: 2
+    index: 23
+  - opcode: LDR
+    reg1: 13
+    address: 3
+    index: 24
+  - opcode: MOV
+    reg1: 12
+    reg2: 0
+    index: 25
+  - opcode: ILDR
+    reg1: 10
+    reg2: 12
+    index: 26
+  - opcode: CMP
+    reg1: 10
+    reg2: 13
+    index: 27
+  - opcode: JZ
+    address: 30
+    index: 28
+  - opcode: JMP
+    address: 33
+    index: 29
+  - opcode: CMP
+    reg1: 10
+    reg2: 10
+    index: 30
+  - opcode: ADD
+    reg1: 12
+    reg2: 10
+    index: 31
+  - opcode: JMP
+    address: 26
+    index: 32
+  - opcode: CMP
+    reg1: 13
+    reg2: 13
+    index: 33
+  - opcode: POP
+    reg1: 11
+    index: 34
+  - opcode: POP
+    reg1: 12
+    index: 35
+  - opcode: POP
+    reg1: 10
+    index: 36
+  - opcode: JMP
+    address: -1
+    index: 37
+  - opcode: LDR
+    reg1: 0
+    address: 4
+    index: 38
+  - opcode: PUSH
+    reg1: 11
+    index: 39
+  - opcode: PUSH
+    reg1: 12
+    index: 40
+  - opcode: PUSH
+    reg1: 10
+    index: 41
+  - opcode: LDR
+    reg1: 11
+    address: 5
+    index: 42
+  - opcode: LDR
+    reg1: 13
+    address: 6
+    index: 43
+  - opcode: MOV
+    reg1: 12
+    reg2: 0
+    index: 44
+  - opcode: ILDR
+    reg1: 10
+    reg2: 12
+    index: 45
+  - opcode: CMP
+    reg1: 10
+    reg2: 13
+    index: 46
+  - opcode: JZ
+    address: 49
+    index: 47
+  - opcode: JMP
+    address: 52
+    index: 48
+  - opcode: CMP
+    reg1: 10
+    reg2: 10
+    index: 49
+  - opcode: ADD
+    reg1: 12
+    reg2: 10
+    index: 50
+  - opcode: JMP
+    address: 45
+    index: 51
+  - opcode: CMP
+    reg1: 13
+    reg2: 13
+    index: 52
+  - opcode: POP
+    reg1: 11
+    index: 53
+  - opcode: POP
+    reg1: 12
+    index: 54
+  - opcode: POP
+    reg1: 10
+    index: 55
+  data_memory:
+  - value: H
+    annotation: char
+    index: 0
+  - value: e
+    annotation: char
+    index: 1
+  - value: l
+    annotation: char
+    index: 2
+  - value: l
+    annotation: char
+    index: 3
+  - value: o
+    annotation: char
+    index: 4
+  - value: ' '
+    annotation: char
+    index: 5
+  - value: w
+    annotation: char
+    index: 6
+  - value: o
+    annotation: char
+    index: 7
+  - value: r
+    annotation: char
+    index: 8
+  - value: l
+    annotation: char
+    index: 9
+  - value: d
+    annotation: char
+    index: 10
+  - value: '!'
+    annotation: char
+    index: 11
+  - value: '0x00'
+    annotation: stop symbol
+    index: 12

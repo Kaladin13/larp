@@ -113,33 +113,53 @@ class Codegen(ABC):
         self.data_pointer = len(self.named_data_memory)
         self.named_data_memory.append(named_memory_entry)
 
-    def stat(self):
+    def stat(self, debug_print=False):
         first_array = self.named_data_memory[:]
         second_array = self.data_memory
 
         padding_length = max(0, self.NAMED_DATA_OFFSET - len(first_array))
-        [{}] * padding_length
+        padding = [{}] * padding_length
 
-        # self.named_data_memory = first_array + padding + second_array # noqa: ERA001
+        if debug_print:
+            self.named_data_memory = first_array + padding + second_array
+
         self.named_data_memory = first_array + second_array
-
         self.instructions[0]["address"] = self.ret_value
-        print("Instruction memory")
 
-        for num, ins in enumerate(self.instructions):
-            if ins["reg1"] is None:
-                print("{}: {} {}".format(
-                    num, ins["opcode"].name, ins["address"]))
-            elif ins["address"] is None and ins["reg2"] is None:
-                print("{}: {} r{}".format(
-                    num, ins["opcode"].name, ins["reg1"]))
-            else:
-                print("{}: {} r{} {}".format(num, ins["opcode"].name, ins["reg1"],
-                                             ins["address"] if ins["reg2"] is None else ("r" + str(ins["reg2"])))
-                      .replace("None", ""))
+        if debug_print:
+            print("Instruction memory")
 
-        print("Data memory")
-        pprint(self.named_data_memory)
+            for num, ins in enumerate(self.instructions):
+                if ins["reg1"] is None:
+                    print("{}: {} {}".format(
+                        num, ins["opcode"].name, ins["address"]))
+                elif ins["address"] is None and ins["reg2"] is None:
+                    print("{}: {} r{}".format(
+                        num, ins["opcode"].name, ins["reg1"]))
+                else:
+                    print("{}: {} r{} {}".format(num, ins["opcode"].name, ins["reg1"],
+                                                 ins["address"] if ins["reg2"] is None else ("r" + str(ins["reg2"])))
+                          .replace("None", ""))
+
+            print("Data memory")
+            pprint(self.named_data_memory)
+
+        ins_memory = []
+
+        for d in self.instructions:
+            # Use a list comprehension to filter out keys with None values
+            a = {key: value for key, value in d.items() if value is not None}
+            a["opcode"] = a["opcode"].name
+            ins_memory.append(a)
+
+        for num, ins in enumerate(ins_memory):
+            ins_memory[num]["index"] = num
+
+        for num, ins in enumerate(self.data_memory):
+            self.data_memory[num]["index"] = num
+
+        return {"instruction_memory": ins_memory,
+                  "data_memory": self.data_memory}
 
 
 cg = Codegen()
