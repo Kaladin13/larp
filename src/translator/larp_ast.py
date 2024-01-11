@@ -6,6 +6,8 @@ from lark import Lark, Token, Transformer, v_args
 from lark.ast_utils import AsList, Ast, WithMeta, create_transformer
 from lark.tree import Meta
 
+from src.config.config import IOMemoryMapping
+
 from .isa import ControlEnum, Opcode, cg, operator_bindings
 
 this_module = sys.modules[__name__]
@@ -180,10 +182,11 @@ class IfExpression(_Expression, WithMeta):
     def else_clause(self):
         cg.add_instruction(Opcode.POP, cg.AC_REGISTER)
         # get zero for comparison
+        # ac_reg (val) ?= s_reg (0)
         cg.add_instruction(Opcode.SUB, cg.S_REGISTER_1, cg.S_REGISTER_1)
         cg.add_instruction(Opcode.CMP, cg.AC_REGISTER, cg.S_REGISTER_1)
         # hack to invert ac register
-        cg.add_instruction(Opcode.JZ, address=cg.get_ip()+2)
+        cg.add_instruction(Opcode.JZ, cg.AC_REGISTER, address=cg.get_ip()+2)
         cg.add_instruction(Opcode.JMP, address=cg.get_ip()+2)
         cg.add_instruction(Opcode.CMP, cg.AC_REGISTER, cg.AC_REGISTER)
 
@@ -196,7 +199,7 @@ class IfExpression(_Expression, WithMeta):
         else:
             self.else_clause()
         # if ac_reg == 1 then body, else take jump
-        cg.add_instruction(Opcode.JZ, address=-1)
+        cg.add_instruction(Opcode.JZ, cg.AC_REGISTER, address=-1)
         jump_inst_address = cg.get_ip() - 1
 
         self.if_body.codegen()
@@ -292,6 +295,7 @@ def control_ret(args: Args):
 
     cg.add_instruction(Opcode.IJMP, cg.R_REGISTER)
 
+
 def control_read(control: Control, args: Args):
     # we don't expect arguments
     assert len(args.expressions) == 0
@@ -307,13 +311,14 @@ def control_read(control: Control, args: Args):
     cg.add_instruction(Opcode.LDR, cg.S_REGISTER_1, address=str_start)
 
     cg.add_instruction(Opcode.LDR, cg.AC_REGISTER,
-                       address=cg.CONTROL_BIT_MAPPING)
+                       address=IOMemoryMapping.CONTROL_BIT_MAPPING.value)
 
     # if ac_reg == 0 then jump
     cg.add_instruction(Opcode.JZ, cg.AC_REGISTER,
                        address=cg.get_ip() + 6)
 
-    cg.add_instruction(Opcode.LDR, cg.AC_REGISTER, address=cg.INPUT_MAPPING)
+    cg.add_instruction(Opcode.LDR, cg.AC_REGISTER,
+                       address=IOMemoryMapping.INPUT_MAPPING.value)
     cg.add_instruction(Opcode.STR, cg.AC_REGISTER, cg.S_REGISTER_1)
 
     # 1 -> ac_reg, s_reg1 += 1
@@ -348,14 +353,15 @@ def handle_string(sym=False):
         cg.add_instruction(Opcode.MOV, cg.S_REGISTER_2,
                            cg.variable_register)
     cg.add_instruction(Opcode.ILDR, cg.AC_REGISTER, reg2=cg.S_REGISTER_2)
+    cg.add_instruction(Opcode.STR, cg.AC_REGISTER, cg.S_REGISTER_1)
     cg.add_instruction(Opcode.CMP, cg.AC_REGISTER, cg.SP_REGISTER)
     # if [new_char] == STOP_SYM then jump
-    cg.add_instruction(Opcode.JZ, address=(cg.get_ip() + 2))
+    cg.add_instruction(Opcode.JZ, cg.AC_REGISTER, address=(cg.get_ip() + 2))
     cg.add_instruction(Opcode.JMP, address=(cg.get_ip() + 4))
 
     cg.add_instruction(Opcode.CMP, cg.AC_REGISTER, cg.AC_REGISTER)
     cg.add_instruction(Opcode.ADD, cg.S_REGISTER_2, cg.AC_REGISTER)
-    cg.add_instruction(Opcode.JMP, address=(cg.get_ip() - 6))
+    cg.add_instruction(Opcode.JMP, address=(cg.get_ip() - 7))
 
     nop()
 
@@ -430,7 +436,7 @@ def control_print(control: Control, args: Args):
     save()
     [exp] = args.expressions
 
-    cg.add_named_memory(cg.OUTPUT_MAPPING)
+    cg.add_named_memory(IOMemoryMapping.OUTPUT_MAPPING.value)
     cg.add_instruction(Opcode.LDR, cg.S_REGISTER_1, address=cg.data_pointer)
 
     cg.add_named_memory(String.STOP_SYM)

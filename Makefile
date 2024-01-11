@@ -6,7 +6,7 @@ LINT = ruff check --fix --unsafe-fixes .
 PYTHON = python3.10
 
 TRANSLATOR = src.translator.main
-EMULATOR = src/emulator/main.py
+EMULATOR = src.emulator.main
 
 test:
 	$(POETRY) $(COVERAGE) run -m $(TEST)
@@ -21,7 +21,7 @@ translator:
 	$(PYTHON) -m $(TRANSLATOR) $(ARGS)
 
 emulator:
-	$(PYTHON) $(EMULATOR)
+	$(PYTHON) -m $(EMULATOR) $(ARGS)
 
 update-golden:
 	$(POETRY) $(COVERAGE) run -m $(TEST) --update-goldens

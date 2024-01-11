@@ -3,24 +3,7 @@ from enum import Enum
 from pprint import pprint
 from typing import Optional
 
-
-class Opcode(str, Enum):
-    LDR = "load"
-    STR = "store"
-    ILDR = "load from reg"
-    ADD = "add"
-    SUB = "substract"
-    MOD = "mod"
-    CMP = "compare"
-    JMP = "jump"
-    IJMP = "jump from reg"
-    JZ = "jump if zero"
-    PUSH = "push"
-    POP = "pop"
-    MOV = "move"
-
-    def __str__(self):
-        return str(self.value)
+from src.config.config import Opcode
 
 
 class ControlEnum(str, Enum):
@@ -51,7 +34,6 @@ class Codegen(ABC):
     NAMED_DATA_OFFSET: int = 128
     registers: list[int] = [0 for i in range(1, 9)]
     AC_REGISTER, S_REGISTER_1, S_REGISTER_2, SP_REGISTER, R_REGISTER = 10, 11, 12, 13, 16
-    CONTROL_BIT_MAPPING, INPUT_MAPPING, OUTPUT_MAPPING = 512, 513, 514
     dynamic_str_ptr: int = 256
     variables: dict = {}
     functions: dict = {}
@@ -118,12 +100,15 @@ class Codegen(ABC):
         second_array = self.data_memory
 
         padding_length = max(0, self.NAMED_DATA_OFFSET - len(first_array))
-        padding = [{}] * padding_length
+        padding = []
+        for nn in range(padding_length):
+            padding.append({})
 
-        if debug_print:
+        if not debug_print:
             self.named_data_memory = first_array + padding + second_array
+        else:
+            self.named_data_memory = first_array + second_array
 
-        self.named_data_memory = first_array + second_array
         self.instructions[0]["address"] = self.ret_value
 
         if debug_print:
@@ -155,11 +140,11 @@ class Codegen(ABC):
         for num, ins in enumerate(ins_memory):
             ins_memory[num]["index"] = num
 
-        for num, ins in enumerate(self.data_memory):
-            self.data_memory[num]["index"] = num
+        for num, ins in enumerate(self.named_data_memory):
+            self.named_data_memory[num]["index"] = num
 
         return {"instruction_memory": ins_memory,
-                  "data_memory": self.data_memory}
+                "data_memory": self.named_data_memory}
 
 
 cg = Codegen()
