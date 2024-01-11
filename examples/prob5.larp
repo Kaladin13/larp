@@ -1,4 +1,6 @@
-(loop a (< a 999999)
-    (do
-        (if (== (% a 5) 0)
-            (print a)))
+(defn solve (num div)
+    (if (== div 10)
+        (ret num))
+    (if (== (% num div) 0)
+        (solve num (- div 1))
+        (solve (+ num 2520) 20)))

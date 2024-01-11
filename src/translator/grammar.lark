@@ -2,17 +2,21 @@ program: expression+
 
 ?expression : atomic
            | if_expression
+           | function
            | invokable
-        //   | "(" expression expression* ")"
 
 atomic : symbol
        | integer
        | string
 
 
+function : "(" "defn" fun_name "(" args ")" fun_body ")"
+
+fun_name : symbol
+fun_body : expression+
+
 invokable : "(" control args ")"
 args : expression*
-
 
 if_expression : "(" "if" condition if_body else_body? ")"
 condition : expression
@@ -26,6 +30,8 @@ else_body : expression
         | "set"
         | "read"
         | "print"
+        | "ret"
+        | symbol
 
 symbol : NAME
 integer : SIGN? DEC_NUMBER

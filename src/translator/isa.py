@@ -13,6 +13,7 @@ class Opcode(str, Enum):
     MOD = "mod"
     CMP = "compare"
     JMP = "jump"
+    IJMP = "jump from reg"
     JZ = "jump if zero"
     PUSH = "push"
     POP = "pop"
@@ -30,6 +31,7 @@ class ControlEnum(str, Enum):
     SET = "set"
     READ = "read"
     PRINT = "print"
+    RETURN = "ret"
 
     def __str__(self):
         return str(self.value)
@@ -48,10 +50,14 @@ class Codegen(ABC):
     data_pointer: int
     NAMED_DATA_OFFSET: int = 128
     registers: list[int] = [0 for i in range(1, 9)]
-    AC_REGISTER, S_REGISTER_1, S_REGISTER_2, SP_REGISTER = 10, 11, 12, 13
+    AC_REGISTER, S_REGISTER_1, S_REGISTER_2, SP_REGISTER, R_REGISTER = 10, 11, 12, 13, 16
     CONTROL_BIT_MAPPING, INPUT_MAPPING, OUTPUT_MAPPING = 512, 513, 514
     dynamic_str_ptr: int = 256
     variables: dict = {}
+    functions: dict = {}
+    ret_value: int = 1
+
+    is_first_call: bool = True
 
     instructions: list[dict] = []
     data_memory: list[dict] = []
@@ -69,6 +75,20 @@ class Codegen(ABC):
 
         else:
             self.variable_register = self.variables[name]["register"]
+
+    def define_fun(self, name: str, arg1_name: str, arg2_name: str):
+        self.functions[name] = {"address": len(self.instructions),
+                                "arg1": arg1_name,
+                                "arg2": arg2_name}
+        self.variables[arg1_name] = {"register": 14}
+        self.variables[arg2_name] = {"register": 15}
+
+    def add_mapping(self, name: str):
+        res = self.functions[name]
+        return [14, 15, res["address"]]
+
+    def get_ip(self):
+        return len(self.instructions)
 
     def add_instruction(self, opcode: Opcode, reg1: Optional[str] = None,
                         reg2: Optional[str] = None, address: Optional[int] = None):
@@ -102,11 +122,21 @@ class Codegen(ABC):
 
         # self.named_data_memory = first_array + padding + second_array # noqa: ERA001
         self.named_data_memory = first_array + second_array
+
+        self.instructions[0]["address"] = self.ret_value
         print("Instruction memory")
 
         for num, ins in enumerate(self.instructions):
-            print("{}: {} r{} {}".format(num, ins["opcode"].name, ins["reg1"],
-                  ins["address"] if ins["reg2"] is None else ins["reg2"]).replace("None", ""))
+            if ins["reg1"] is None:
+                print("{}: {} {}".format(
+                    num, ins["opcode"].name, ins["address"]))
+            elif ins["address"] is None and ins["reg2"] is None:
+                print("{}: {} r{}".format(
+                    num, ins["opcode"].name, ins["reg1"]))
+            else:
+                print("{}: {} r{} {}".format(num, ins["opcode"].name, ins["reg1"],
+                                             ins["address"] if ins["reg2"] is None else ("r" + str(ins["reg2"])))
+                      .replace("None", ""))
 
         print("Data memory")
         pprint(self.named_data_memory)
