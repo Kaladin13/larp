@@ -80,9 +80,17 @@ class ControlUnit(ABC):
 
         self.pc += 1
 
+    def dump(self):
+        print("pc " + str(self.pc - 1))
+        for index, value in enumerate(self.registers):
+            if value != 0:
+                print(f"r{index}: {value} |", end=" ")
+        print("\n")
+
     def start(self):
         while self.pc != len(self.instructions):
             self.tick()
+            # self.dump() :noq ERA001
         self.stat()
 
     def stat(self):

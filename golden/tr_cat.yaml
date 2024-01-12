@@ -8,13 +8,13 @@ output:
     address: 1
     index: 0
   - opcode: PUSH
-    reg1: 11
+    reg1: 10
     index: 1
   - opcode: PUSH
-    reg1: 12
+    reg1: 11
     index: 2
   - opcode: PUSH
-    reg1: 10
+    reg1: 12
     index: 3
   - opcode: LDR
     reg1: 12
@@ -56,10 +56,10 @@ output:
     reg2: 11
     index: 13
   - opcode: POP
-    reg1: 11
+    reg1: 12
     index: 14
   - opcode: POP
-    reg1: 12
+    reg1: 11
     index: 15
   - opcode: POP
     reg1: 10
@@ -75,13 +75,13 @@ output:
     reg1: 0
     index: 19
   - opcode: PUSH
-    reg1: 11
+    reg1: 10
     index: 20
   - opcode: PUSH
-    reg1: 12
+    reg1: 11
     index: 21
   - opcode: PUSH
-    reg1: 10
+    reg1: 12
     index: 22
   - opcode: LDR
     reg1: 11
@@ -129,15 +129,18 @@ output:
     reg1: 13
     reg2: 13
     index: 34
-  - opcode: POP
+  - opcode: PUSH
     reg1: 11
     index: 35
   - opcode: POP
     reg1: 12
     index: 36
   - opcode: POP
-    reg1: 10
+    reg1: 11
     index: 37
+  - opcode: POP
+    reg1: 10
+    index: 38
   data_memory:
   - value: '0x00'
     annotation: number

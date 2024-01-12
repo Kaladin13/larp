@@ -4,3 +4,7 @@
     (if (== (% num div) 0)
         (solve num (- div 1))
         (solve (+ num 2520) 20)))
+
+(set val 2520)
+(set res (solve val 20))
+(print res)

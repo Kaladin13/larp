@@ -6,8 +6,7 @@ from lark import Lark, Token, Transformer, v_args
 from lark.ast_utils import AsList, Ast, WithMeta, create_transformer
 from lark.tree import Meta
 from src.config.config import IOMemoryMapping
-
-from .isa import ControlEnum, Opcode, cg, operator_bindings
+from src.translator.isa import ControlEnum, Opcode, cg, operator_bindings
 
 this_module = sys.modules[__name__]
 
@@ -185,7 +184,8 @@ class IfExpression(_Expression, WithMeta):
         cg.add_instruction(Opcode.SUB, cg.S_REGISTER_1, cg.S_REGISTER_1)
         cg.add_instruction(Opcode.CMP, cg.AC_REGISTER, cg.S_REGISTER_1)
         # hack to invert ac register
-        cg.add_instruction(Opcode.JZ, cg.AC_REGISTER, address=cg.get_ip()+2)
+        cg.add_instruction(Opcode.JZ, cg.AC_REGISTER, address=cg.get_ip()+3)
+        cg.add_instruction(Opcode.SUB, cg.AC_REGISTER, cg.AC_REGISTER)
         cg.add_instruction(Opcode.JMP, address=cg.get_ip()+2)
         cg.add_instruction(Opcode.CMP, cg.AC_REGISTER, cg.AC_REGISTER)
 
@@ -273,14 +273,14 @@ class LarkToASTTransformer(Transformer):
 
 
 def save():
+    cg.add_instruction(Opcode.PUSH, cg.AC_REGISTER)
     cg.add_instruction(Opcode.PUSH, cg.S_REGISTER_1)
     cg.add_instruction(Opcode.PUSH, cg.S_REGISTER_2)
-    cg.add_instruction(Opcode.PUSH, cg.AC_REGISTER)
 
 
 def load():
-    cg.add_instruction(Opcode.POP, cg.S_REGISTER_1)
     cg.add_instruction(Opcode.POP, cg.S_REGISTER_2)
+    cg.add_instruction(Opcode.POP, cg.S_REGISTER_1)
     cg.add_instruction(Opcode.POP, cg.AC_REGISTER)
 
 
@@ -424,10 +424,10 @@ def control_funcall(name: str, args: Args):
 
     if cg.is_first_call:
         cg.add_named_memory(cg.get_ip() + 3)
-        cg.add_instruction(Opcode.LDR, cg.R_REGISTER, cg.data_pointer)
+        cg.add_instruction(Opcode.LDR, cg.R_REGISTER, address=cg.data_pointer)
         cg.is_first_call = False
 
-    cg.add_instruction(Opcode.JMP, fn_address)
+    cg.add_instruction(Opcode.JMP, address=fn_address)
 
 
 def control_print(control: Control, args: Args):
@@ -452,7 +452,7 @@ def control_print(control: Control, args: Args):
             handle_string(True)
         else:
             handle_int(True)
-
+    cg.add_instruction(Opcode.PUSH, cg.S_REGISTER_1)
     load()
 
 

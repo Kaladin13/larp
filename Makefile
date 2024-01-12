@@ -1,4 +1,5 @@
-POETRY = poetry run
+POETRY = poetry
+POETRY_RUN = $(POETRY) run
 TEST = pytest --verbose -vv
 COVERAGE = coverage
 LINT = ruff check --fix --unsafe-fixes .
@@ -8,14 +9,17 @@ PYTHON = python3.10
 TRANSLATOR = src.translator.main
 EMULATOR = src.emulator.main
 
+poetry:
+	$(POETRY) install
+
 test:
-	$(POETRY) $(COVERAGE) run -m $(TEST)
+	$(POETRY_RUN) $(COVERAGE) run -m $(TEST)
 
 coverage: test
-	$(POETRY) $(COVERAGE) report -m
+	$(POETRY_RUN) $(COVERAGE) report -m
 
 lint:
-	$(POETRY) $(LINT)
+	$(POETRY_RUN) $(LINT)
 
 translator:
 	$(PYTHON) -m $(TRANSLATOR) $(ARGS)
@@ -24,4 +28,4 @@ emulator:
 	$(PYTHON) -m $(EMULATOR) $(ARGS)
 
 update-golden:
-	$(POETRY) $(COVERAGE) run -m $(TEST) --update-goldens
+	$(POETRY_RUN) $(COVERAGE) run -m $(TEST) --update-goldens

@@ -1,6 +1,10 @@
 input: |-
-  (set a "Hello world!")
-  (print a)
+  (set a "1")
+  (set b 2)
+
+  (if (== b 3)
+      (print b)
+      (print a))
 
 output:
   instruction_memory:
@@ -215,6 +219,211 @@ output:
   - opcode: POP
     reg1: 10
     index: 59
+  - opcode: JMP
+    address: -1
+    index: 60
+  - opcode: LDR
+    reg1: 0
+    address: 144
+    index: 61
+  - opcode: LDR
+    reg1: 1
+    address: 145
+    index: 62
+  - opcode: PUSH
+    reg1: 10
+    index: 63
+  - opcode: PUSH
+    reg1: 11
+    index: 64
+  - opcode: PUSH
+    reg1: 12
+    index: 65
+  - opcode: LDR
+    reg1: 10
+    address: 146
+    index: 66
+  - opcode: MOV
+    reg1: 11
+    reg2: 1
+    index: 67
+  - opcode: CMP
+    reg1: 11
+    reg2: 10
+    index: 68
+  - opcode: MOV
+    reg1: 13
+    reg2: 11
+    index: 69
+  - opcode: POP
+    reg1: 12
+    index: 70
+  - opcode: POP
+    reg1: 11
+    index: 71
+  - opcode: POP
+    reg1: 10
+    index: 72
+  - opcode: PUSH
+    reg1: 13
+    index: 73
+  - opcode: POP
+    reg1: 10
+    index: 74
+  - opcode: SUB
+    reg1: 11
+    reg2: 11
+    index: 75
+  - opcode: CMP
+    reg1: 10
+    reg2: 11
+    index: 76
+  - opcode: JZ
+    reg1: 10
+    address: 80
+    index: 77
+  - opcode: SUB
+    reg1: 10
+    reg2: 10
+    index: 78
+  - opcode: JMP
+    address: 81
+    index: 79
+  - opcode: CMP
+    reg1: 10
+    reg2: 10
+    index: 80
+  - opcode: JZ
+    reg1: 10
+    address: 96
+    index: 81
+  - opcode: PUSH
+    reg1: 10
+    index: 82
+  - opcode: PUSH
+    reg1: 11
+    index: 83
+  - opcode: PUSH
+    reg1: 12
+    index: 84
+  - opcode: LDR
+    reg1: 11
+    address: 147
+    index: 85
+  - opcode: LDR
+    reg1: 13
+    address: 148
+    index: 86
+  - opcode: MOV
+    reg1: 10
+    reg2: 1
+    index: 87
+  - opcode: STR
+    reg1: 10
+    reg2: 11
+    index: 88
+  - opcode: PUSH
+    reg1: 11
+    index: 89
+  - opcode: POP
+    reg1: 12
+    index: 90
+  - opcode: POP
+    reg1: 11
+    index: 91
+  - opcode: POP
+    reg1: 10
+    index: 92
+  - opcode: POP
+    reg1: 13
+    index: 93
+  - opcode: PUSH
+    reg1: 13
+    index: 94
+  - opcode: JMP
+    address: 118
+    index: 95
+  - opcode: CMP
+    reg1: 13
+    reg2: 13
+    index: 96
+  - opcode: PUSH
+    reg1: 10
+    index: 97
+  - opcode: PUSH
+    reg1: 11
+    index: 98
+  - opcode: PUSH
+    reg1: 12
+    index: 99
+  - opcode: LDR
+    reg1: 11
+    address: 149
+    index: 100
+  - opcode: LDR
+    reg1: 13
+    address: 150
+    index: 101
+  - opcode: MOV
+    reg1: 12
+    reg2: 0
+    index: 102
+  - opcode: ILDR
+    reg1: 10
+    reg2: 12
+    index: 103
+  - opcode: STR
+    reg1: 10
+    reg2: 11
+    index: 104
+  - opcode: CMP
+    reg1: 10
+    reg2: 13
+    index: 105
+  - opcode: JZ
+    reg1: 10
+    address: 108
+    index: 106
+  - opcode: JMP
+    address: 111
+    index: 107
+  - opcode: CMP
+    reg1: 10
+    reg2: 10
+    index: 108
+  - opcode: ADD
+    reg1: 12
+    reg2: 10
+    index: 109
+  - opcode: JMP
+    address: 103
+    index: 110
+  - opcode: CMP
+    reg1: 13
+    reg2: 13
+    index: 111
+  - opcode: PUSH
+    reg1: 11
+    index: 112
+  - opcode: POP
+    reg1: 12
+    index: 113
+  - opcode: POP
+    reg1: 11
+    index: 114
+  - opcode: POP
+    reg1: 10
+    index: 115
+  - opcode: POP
+    reg1: 13
+    index: 116
+  - opcode: PUSH
+    reg1: 13
+    index: 117
+  - opcode: CMP
+    reg1: 13
+    reg2: 13
+    index: 118
   data_memory:
   - value: '0x00'
     annotation: number
@@ -361,42 +570,95 @@ output:
   - value: '0x00'
     annotation: number
     index: 130
-  - value: H
+  - &id001
+    value: H
     annotation: char
-    index: 131
-  - value: e
+    index: 151
+  - &id002
+    value: e
     annotation: char
-    index: 132
-  - value: l
+    index: 152
+  - &id003
+    value: l
     annotation: char
-    index: 133
-  - value: l
+    index: 153
+  - &id004
+    value: l
     annotation: char
-    index: 134
-  - value: o
+    index: 154
+  - &id005
+    value: o
     annotation: char
-    index: 135
-  - value: ' '
+    index: 155
+  - &id006
+    value: ' '
     annotation: char
-    index: 136
-  - value: w
+    index: 156
+  - &id007
+    value: w
     annotation: char
-    index: 137
-  - value: o
+    index: 157
+  - &id008
+    value: o
     annotation: char
-    index: 138
-  - value: r
+    index: 158
+  - &id009
+    value: r
     annotation: char
-    index: 139
-  - value: l
+    index: 159
+  - &id010
+    value: l
     annotation: char
-    index: 140
-  - value: d
+    index: 160
+  - &id011
+    value: d
     annotation: char
-    index: 141
-  - value: '!'
+    index: 161
+  - &id012
+    value: '!'
     annotation: char
-    index: 142
+    index: 162
+  - &id013
+    value: '0x00'
+    annotation: stop symbol
+    index: 163
+  - value: 141
+    annotation: string pointer
+    index: 144
+  - value: 2
+    annotation: number
+    index: 145
+  - value: 3
+    annotation: number
+    index: 146
+  - value: 514
+    annotation: number
+    index: 147
+  - value: '0x00'
+    annotation: number
+    index: 148
+  - value: 514
+    annotation: number
+    index: 149
+  - value: '0x00'
+    annotation: number
+    index: 150
+  - *id001
+  - *id002
+  - *id003
+  - *id004
+  - *id005
+  - *id006
+  - *id007
+  - *id008
+  - *id009
+  - *id010
+  - *id011
+  - *id012
+  - *id013
+  - value: '1'
+    annotation: char
+    index: 164
   - value: '0x00'
     annotation: stop symbol
-    index: 143
+    index: 165

@@ -2,7 +2,7 @@ import json
 import sys
 from pathlib import Path
 
-from .larp_ast import parse_program
+from src.translator.larp_ast import parse_program
 
 
 def say_hi_trans() -> None:
