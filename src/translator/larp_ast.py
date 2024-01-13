@@ -384,8 +384,11 @@ def handle_two_args(arg1, arg2):
     arg1.codegen()
     reg1: int
     if arg1.__class__ == _Integer:
-        cg.add_instruction(Opcode.LDR, cg.AC_REGISTER, address=cg.data_pointer)
-        reg1 = cg.AC_REGISTER
+        reg_hp = cg.AC_REGISTER
+        if reg2 == reg_hp:
+            reg_hp = cg.S_REGISTER_1
+        cg.add_instruction(Opcode.LDR, reg_hp, address=cg.data_pointer)
+        reg1 = reg_hp
     elif arg1.__class__ == Symbol:
         cg.add_instruction(Opcode.MOV, cg.S_REGISTER_1,
                            reg2=cg.variable_register)
@@ -426,7 +429,6 @@ def control_funcall(name: str, args: Args):
     if cg.is_first_call:
         cg.add_named_memory(cg.get_ip() + 3)
         cg.add_instruction(Opcode.LDR, cg.R_REGISTER, address=cg.data_pointer)
-
 
     cg.add_instruction(Opcode.JMP, address=fn_address)
     nop()

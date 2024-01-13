@@ -32,7 +32,7 @@ def try_out():
 
 if __name__ == "__main__":
 
-    debug_mode = True
+    debug_mode = False
 
     if debug_mode:
         try_out()
