@@ -121,9 +121,6 @@ IO ports are statically mapped to specific data memory addresses. Instructions o
 
 Second register group is callee saved
 
-- Program counter - 32 bit
-- Stack pointer - 32 bit
-
 ## ISA
 
 ### Architecture
@@ -219,7 +216,7 @@ python3 -m src.translator.main <input_file> <output_file>
 
 ### Datapath
 
-![datapath_img](/public/datapath.jpg)
+![datapath_img](/public/datapath_1.jpg)
 
 #### Signals
 
