@@ -14,7 +14,29 @@ def translate(text):
     return tree.codegen()
 
 
+def try_out():
+    text = """
+        (defn solve (num div)
+        (if (== div 10)
+            (ret num))
+        (if (== (% num div) 0)
+            (solve num (- div 1))
+            (solve (+ num 2520) 20)))
+
+    (set val 232792560)
+    (set res (solve val 20))
+    (print res)
+"""
+    translate(text)
+
+
 if __name__ == "__main__":
+
+    debug_mode = True
+
+    if debug_mode:
+        try_out()
+
     if len(sys.argv) != 3:
         print("Invalid arguments. Usage: translator <input_file> <output_file>")
         sys.exit(1)

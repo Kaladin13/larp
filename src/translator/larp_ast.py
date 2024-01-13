@@ -402,7 +402,7 @@ def control_defn(fun_name: str,
     assert len(args) == 2
     assert args[0].__class__ == Symbol
     assert args[1].__class__ == Symbol
-
+    cg.is_first_call = False
     cg.define_fun(fun_name, args[0].name, args[1].name)
 
     for v in fun_body:
@@ -410,6 +410,7 @@ def control_defn(fun_name: str,
 
     cg.add_instruction(Opcode.IJMP, cg.R_REGISTER)
     cg.ret_value = cg.get_ip()
+    cg.is_first_call = True
 
 
 def control_funcall(name: str, args: Args):
@@ -425,9 +426,10 @@ def control_funcall(name: str, args: Args):
     if cg.is_first_call:
         cg.add_named_memory(cg.get_ip() + 3)
         cg.add_instruction(Opcode.LDR, cg.R_REGISTER, address=cg.data_pointer)
-        cg.is_first_call = False
+
 
     cg.add_instruction(Opcode.JMP, address=fn_address)
+    nop()
 
 
 def control_print(control: Control, args: Args):
@@ -480,7 +482,12 @@ def control_set(control: Control, args: Args):
     else:
         arg1.codegen()
         cg.add_instruction(Opcode.POP, cg.variable_register)
-        cg.registers[cg.variable_register] = 2
+
+        if hasattr(arg2.control.control, "name"):
+            # funcall, so it is int
+            cg.registers[cg.variable_register] = 1
+        else:
+            cg.registers[cg.variable_register] = 2
 
 
 def control_bin_ops(control: Control, args: Args):
