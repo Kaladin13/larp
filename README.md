@@ -214,3 +214,126 @@ ARGS="<input_file> <output_file>" make translator
 # or
 python3 -m src.translator.main <input_file> <output_file>
 ```
+
+## Emulator
+
+### Datapath
+
+![datapath_img](/public/datapath.jpg)
+
+#### Signals
+
+### Control unit
+
+Handles microcode execution, contains premade read-only memory with microcode
+
+![cpu_img](/public/cpu.jpg)
+
+### CLI
+
+```bash
+make poetry
+ARGS="<input_file> <buffer> <output_file>" make emulator
+# or
+python3 -m src.emulator.main <input_file> <buffer> <output_file>
+```
+
+## Testing
+
+`Test coverage is 71%`
+
+All programs in [examples](/examples/) folder are tested and working correctly
+
+There are [unit tests](/tests/unit_test.py) and [integrational tests](/tests/integration_test.py) in form of golden tests. Input values could be found in [golden](/golden/) folder
+
+### CLI
+
+```bash
+make poetry
+make test
+make coverage
+```
+
+And update golden tests with:
+
+```bash
+make poetry
+make update-golden
+```
+
+## CI
+
+Gitlab Actions CI
+
+```yaml
+name: Nothing has broken
+
+on: [push, pull_request]
+
+jobs:
+  quality:
+    name: Nothing has broken
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v3
+
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.10"
+
+      - name: Install poetry
+        run: python -m pip install poetry
+
+      - name: Install dependencies
+        run: poetry install
+
+      - name: Lint with ruff
+        run: make lint
+
+      - name: Run tests and show coverage
+        run: make coverage
+```
+
+Example of test run
+```bash
+poetry run coverage run -m pytest --verbose -vv
+============================= test session starts ==============================
+platform linux -- Python 3.10.12, pytest-7.4.3, pluggy-1.3.0 -- /home/kaladin/.cache/pypoetry/virtualenvs/larp-O-cp4rMj-py3.10/bin/python
+cachedir: .pytest_cache
+rootdir: /home/kaladin/IdeaProjects/larp
+configfile: pyproject.toml
+testpaths: tests
+plugins: golden-0.2.2
+collecting ... collected 7 items
+
+tests/integration_test.py::test_ci PASSED                                [ 14%]
+tests/integration_test.py::test_imports PASSED                           [ 28%]
+tests/integration_test.py::test_golden_replace[../golden/simple.yaml] PASSED [ 42%]
+tests/integration_test.py::test_translator[../golden/tr_cat.yaml] PASSED [ 57%]
+tests/integration_test.py::test_translator[../golden/tr_hello.yaml] PASSED [ 71%]
+tests/integration_test.py::test_translator[../golden/tr_if.yaml] PASSED  [ 85%]
+tests/unit_test.py::test_building_ast PASSED                             [100%]
+
+============================== 7 passed in 0.75s ===============================
+poetry run coverage report -m
+Name                         Stmts   Miss  Cover   Missing
+----------------------------------------------------------
+src/config/config.py            21      1    95%   20
+src/emulator/cu.py              18      9    50%   13-14, 17-25
+src/emulator/datapath.py        69     34    51%   23-30, 33, 37, 41-44, 47-52, 55, 60, 65, 68, 73-75, 78, 84, 87-88, 91, 96, 99, 105, 110
+src/emulator/elements.py        91     35    62%   20, 23-26, 33, 36, 43, 53, 60, 63, 66, 69, 76, 79, 87, 90, 93, 104-105, 108, 111, 114-117, 120-123, 126, 129, 137, 140, 143-145
+src/emulator/io.py              16      8    50%   11-12, 15-19, 22
+src/emulator/main.py            23     15    35%   13-16, 22-35
+src/emulator/microcode.py      106     40    62%   37-94
+src/translator/isa.py           93     16    83%   20, 62-66, 69-70, 110, 115-130
+src/translator/larp_ast.py     335     64    81%   16, 75, 84, 96-97, 107, 145, 154, 165, 197, 206, 209, 230, 233, 264, 272, 288-295, 339, 349, 374-382, 387-391, 397-398, 405-416, 420-434, 451, 453, 479-483, 490
+src/translator/main.py          26     15    42%   18-30, 35-51
+tests/integration_test.py       13      0   100%
+tests/unit_test.py              10      0   100%
+----------------------------------------------------------
+TOTAL                          821    237    71%
+```
+
