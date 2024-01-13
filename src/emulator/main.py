@@ -2,7 +2,7 @@ import json
 import sys
 from pathlib import Path
 
-from .control_unit import ControlUnit
+from .cu import CU
 
 
 def say_hi_em() -> None:
@@ -13,7 +13,7 @@ def parse_input(input_fl, buffer):
     conf = json.load(input_fl)
     buf = json.load(buffer)
 
-    return ControlUnit(conf["instruction_memory"],
+    return CU(conf["instruction_memory"],
                        conf["data_memory"],
                        buf)
 
@@ -32,4 +32,4 @@ if __name__ == "__main__":
         with open(sys.argv[2], encoding="utf-8") as buffer:
             with open(sys.argv[3], "w", encoding="utf-8") as output:
                 cpu = parse_input(file, buffer)
-                cpu.start()
+                cpu.run()
