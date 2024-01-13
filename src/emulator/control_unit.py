@@ -17,6 +17,7 @@ class ControlUnit(ABC):
     io: IO
     instructions: list[dict]
     data: list[dict]
+    res: str = []
 
     def __init__(self, inst_data, mem_data, input_bg) -> None:
         self.instructions = inst_data
@@ -81,25 +82,27 @@ class ControlUnit(ABC):
         self.pc += 1
 
     def dump(self):
-        print("pc " + str(self.pc - 1))
-        for index, value in enumerate(self.registers):
-            if value != 0:
-                print(f"r{index}: {value} |", end=" ")
-        print("\n")
+        data = {
+            "pc": self.pc - 1,
+            "registers": {f"r{index}": value for index, value in enumerate(self.registers) if value != 0}
+        }
+        self.res.append(data)
 
     def start(self):
         while self.pc != len(self.instructions):
             self.tick()
-            # self.dump() :noq ERA001
-        self.stat()
+            self.dump()
+        return self.stat()
 
     def stat(self):
         print("Output buffer:")
         print("".join(str(x)
               for x in self.io.output_buffer).replace("0x00", "\n"))
-        print("\nLeft input buffer")
-        pprint(self.io.input_buffer)
-        print("\nLeft stack")
-        pprint(self.stack)
-        print("\nEnd pc")
+        print("End pc")
         pprint(self.pc)
+        obb = {
+            "output": "".join(str(x)
+                              for x in self.io.output_buffer).replace("0x00", "\n"),
+        }
+        self.res.insert(0, obb)
+        return self.res

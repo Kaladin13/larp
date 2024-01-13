@@ -6,6 +6,12 @@ input: |-
       (print b)
       (print a))
 
+buffer: |-
+  ["m", "a", "k", "s", "i", "m"]
+
+log: |-
+  sd
+
 output:
   instruction_memory:
   - opcode: JMP

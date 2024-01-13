@@ -244,6 +244,8 @@ python3 -m src.emulator.main <input_file> <buffer> <output_file>
 
 All programs in [examples](/examples/) folder are tested and working correctly
 
+Execution logs could be found at `/public/logs` with memory files for some of them
+
 There are [unit tests](/tests/unit_test.py) and [integrational tests](/tests/integration_test.py) in form of golden tests. Input values could be found in [golden](/golden/) folder
 
 ### CLI
@@ -298,6 +300,7 @@ jobs:
 ```
 
 Example of test run
+
 ```bash
 poetry run coverage run -m pytest --verbose -vv
 ============================= test session starts ==============================
@@ -336,4 +339,3 @@ tests/unit_test.py              10      0   100%
 ----------------------------------------------------------
 TOTAL                          821    237    71%
 ```
-

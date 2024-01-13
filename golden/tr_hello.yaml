@@ -2,6 +2,13 @@ input: |-
   (set a "Hello world!")
   (print a)
 
+buffer: |-
+  ["m", "a", "k", "s", "i", "m"]
+
+log:
+- output: |
+    2
+
 output:
   instruction_memory:
   - opcode: JMP
