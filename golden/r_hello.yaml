@@ -1,0 +1,670 @@
+input: |-
+  (set a "Hello world!")
+  (print a)
+
+buffer: |-
+  ["m", "a", "k", "s", "i", "m"]
+
+output:
+- output: |
+    Hello world!
+- pc: 0
+  registers: {}
+- pc: 1
+  registers:
+    r0: 128
+- pc: 2
+  registers:
+    r0: 128
+- pc: 3
+  registers:
+    r0: 128
+- pc: 4
+  registers:
+    r0: 128
+- pc: 5
+  registers:
+    r0: 128
+    r11: 514
+- pc: 6
+  registers:
+    r0: 128
+    r11: 514
+    r13: '0x00'
+- pc: 7
+  registers:
+    r0: 128
+    r11: 514
+    r12: 128
+    r13: '0x00'
+- pc: 8
+  registers:
+    r0: 128
+    r10: H
+    r11: 514
+    r12: 128
+    r13: '0x00'
+- pc: 9
+  registers:
+    r0: 128
+    r10: H
+    r11: 514
+    r12: 128
+    r13: '0x00'
+- pc: 10
+  registers:
+    r0: 128
+    r11: 514
+    r12: 128
+    r13: '0x00'
+- pc: 12
+  registers:
+    r0: 128
+    r11: 514
+    r12: 128
+    r13: '0x00'
+- pc: 13
+  registers:
+    r0: 128
+    r10: 1
+    r11: 514
+    r12: 128
+    r13: '0x00'
+- pc: 14
+  registers:
+    r0: 128
+    r10: 1
+    r11: 514
+    r12: 129
+    r13: '0x00'
+- pc: 7
+  registers:
+    r0: 128
+    r10: 1
+    r11: 514
+    r12: 129
+    r13: '0x00'
+- pc: 8
+  registers:
+    r0: 128
+    r10: e
+    r11: 514
+    r12: 129
+    r13: '0x00'
+- pc: 9
+  registers:
+    r0: 128
+    r10: e
+    r11: 514
+    r12: 129
+    r13: '0x00'
+- pc: 10
+  registers:
+    r0: 128
+    r11: 514
+    r12: 129
+    r13: '0x00'
+- pc: 12
+  registers:
+    r0: 128
+    r11: 514
+    r12: 129
+    r13: '0x00'
+- pc: 13
+  registers:
+    r0: 128
+    r10: 1
+    r11: 514
+    r12: 129
+    r13: '0x00'
+- pc: 14
+  registers:
+    r0: 128
+    r10: 1
+    r11: 514
+    r12: 130
+    r13: '0x00'
+- pc: 7
+  registers:
+    r0: 128
+    r10: 1
+    r11: 514
+    r12: 130
+    r13: '0x00'
+- pc: 8
+  registers:
+    r0: 128
+    r10: l
+    r11: 514
+    r12: 130
+    r13: '0x00'
+- pc: 9
+  registers:
+    r0: 128
+    r10: l
+    r11: 514
+    r12: 130
+    r13: '0x00'
+- pc: 10
+  registers:
+    r0: 128
+    r11: 514
+    r12: 130
+    r13: '0x00'
+- pc: 12
+  registers:
+    r0: 128
+    r11: 514
+    r12: 130
+    r13: '0x00'
+- pc: 13
+  registers:
+    r0: 128
+    r10: 1
+    r11: 514
+    r12: 130
+    r13: '0x00'
+- pc: 14
+  registers:
+    r0: 128
+    r10: 1
+    r11: 514
+    r12: 131
+    r13: '0x00'
+- pc: 7
+  registers:
+    r0: 128
+    r10: 1
+    r11: 514
+    r12: 131
+    r13: '0x00'
+- pc: 8
+  registers:
+    r0: 128
+    r10: l
+    r11: 514
+    r12: 131
+    r13: '0x00'
+- pc: 9
+  registers:
+    r0: 128
+    r10: l
+    r11: 514
+    r12: 131
+    r13: '0x00'
+- pc: 10
+  registers:
+    r0: 128
+    r11: 514
+    r12: 131
+    r13: '0x00'
+- pc: 12
+  registers:
+    r0: 128
+    r11: 514
+    r12: 131
+    r13: '0x00'
+- pc: 13
+  registers:
+    r0: 128
+    r10: 1
+    r11: 514
+    r12: 131
+    r13: '0x00'
+- pc: 14
+  registers:
+    r0: 128
+    r10: 1
+    r11: 514
+    r12: 132
+    r13: '0x00'
+- pc: 7
+  registers:
+    r0: 128
+    r10: 1
+    r11: 514
+    r12: 132
+    r13: '0x00'
+- pc: 8
+  registers:
+    r0: 128
+    r10: o
+    r11: 514
+    r12: 132
+    r13: '0x00'
+- pc: 9
+  registers:
+    r0: 128
+    r10: o
+    r11: 514
+    r12: 132
+    r13: '0x00'
+- pc: 10
+  registers:
+    r0: 128
+    r11: 514
+    r12: 132
+    r13: '0x00'
+- pc: 12
+  registers:
+    r0: 128
+    r11: 514
+    r12: 132
+    r13: '0x00'
+- pc: 13
+  registers:
+    r0: 128
+    r10: 1
+    r11: 514
+    r12: 132
+    r13: '0x00'
+- pc: 14
+  registers:
+    r0: 128
+    r10: 1
+    r11: 514
+    r12: 133
+    r13: '0x00'
+- pc: 7
+  registers:
+    r0: 128
+    r10: 1
+    r11: 514
+    r12: 133
+    r13: '0x00'
+- pc: 8
+  registers:
+    r0: 128
+    r10: ' '
+    r11: 514
+    r12: 133
+    r13: '0x00'
+- pc: 9
+  registers:
+    r0: 128
+    r10: ' '
+    r11: 514
+    r12: 133
+    r13: '0x00'
+- pc: 10
+  registers:
+    r0: 128
+    r11: 514
+    r12: 133
+    r13: '0x00'
+- pc: 12
+  registers:
+    r0: 128
+    r11: 514
+    r12: 133
+    r13: '0x00'
+- pc: 13
+  registers:
+    r0: 128
+    r10: 1
+    r11: 514
+    r12: 133
+    r13: '0x00'
+- pc: 14
+  registers:
+    r0: 128
+    r10: 1
+    r11: 514
+    r12: 134
+    r13: '0x00'
+- pc: 7
+  registers:
+    r0: 128
+    r10: 1
+    r11: 514
+    r12: 134
+    r13: '0x00'
+- pc: 8
+  registers:
+    r0: 128
+    r10: w
+    r11: 514
+    r12: 134
+    r13: '0x00'
+- pc: 9
+  registers:
+    r0: 128
+    r10: w
+    r11: 514
+    r12: 134
+    r13: '0x00'
+- pc: 10
+  registers:
+    r0: 128
+    r11: 514
+    r12: 134
+    r13: '0x00'
+- pc: 12
+  registers:
+    r0: 128
+    r11: 514
+    r12: 134
+    r13: '0x00'
+- pc: 13
+  registers:
+    r0: 128
+    r10: 1
+    r11: 514
+    r12: 134
+    r13: '0x00'
+- pc: 14
+  registers:
+    r0: 128
+    r10: 1
+    r11: 514
+    r12: 135
+    r13: '0x00'
+- pc: 7
+  registers:
+    r0: 128
+    r10: 1
+    r11: 514
+    r12: 135
+    r13: '0x00'
+- pc: 8
+  registers:
+    r0: 128
+    r10: o
+    r11: 514
+    r12: 135
+    r13: '0x00'
+- pc: 9
+  registers:
+    r0: 128
+    r10: o
+    r11: 514
+    r12: 135
+    r13: '0x00'
+- pc: 10
+  registers:
+    r0: 128
+    r11: 514
+    r12: 135
+    r13: '0x00'
+- pc: 12
+  registers:
+    r0: 128
+    r11: 514
+    r12: 135
+    r13: '0x00'
+- pc: 13
+  registers:
+    r0: 128
+    r10: 1
+    r11: 514
+    r12: 135
+    r13: '0x00'
+- pc: 14
+  registers:
+    r0: 128
+    r10: 1
+    r11: 514
+    r12: 136
+    r13: '0x00'
+- pc: 7
+  registers:
+    r0: 128
+    r10: 1
+    r11: 514
+    r12: 136
+    r13: '0x00'
+- pc: 8
+  registers:
+    r0: 128
+    r10: r
+    r11: 514
+    r12: 136
+    r13: '0x00'
+- pc: 9
+  registers:
+    r0: 128
+    r10: r
+    r11: 514
+    r12: 136
+    r13: '0x00'
+- pc: 10
+  registers:
+    r0: 128
+    r11: 514
+    r12: 136
+    r13: '0x00'
+- pc: 12
+  registers:
+    r0: 128
+    r11: 514
+    r12: 136
+    r13: '0x00'
+- pc: 13
+  registers:
+    r0: 128
+    r10: 1
+    r11: 514
+    r12: 136
+    r13: '0x00'
+- pc: 14
+  registers:
+    r0: 128
+    r10: 1
+    r11: 514
+    r12: 137
+    r13: '0x00'
+- pc: 7
+  registers:
+    r0: 128
+    r10: 1
+    r11: 514
+    r12: 137
+    r13: '0x00'
+- pc: 8
+  registers:
+    r0: 128
+    r10: l
+    r11: 514
+    r12: 137
+    r13: '0x00'
+- pc: 9
+  registers:
+    r0: 128
+    r10: l
+    r11: 514
+    r12: 137
+    r13: '0x00'
+- pc: 10
+  registers:
+    r0: 128
+    r11: 514
+    r12: 137
+    r13: '0x00'
+- pc: 12
+  registers:
+    r0: 128
+    r11: 514
+    r12: 137
+    r13: '0x00'
+- pc: 13
+  registers:
+    r0: 128
+    r10: 1
+    r11: 514
+    r12: 137
+    r13: '0x00'
+- pc: 14
+  registers:
+    r0: 128
+    r10: 1
+    r11: 514
+    r12: 138
+    r13: '0x00'
+- pc: 7
+  registers:
+    r0: 128
+    r10: 1
+    r11: 514
+    r12: 138
+    r13: '0x00'
+- pc: 8
+  registers:
+    r0: 128
+    r10: d
+    r11: 514
+    r12: 138
+    r13: '0x00'
+- pc: 9
+  registers:
+    r0: 128
+    r10: d
+    r11: 514
+    r12: 138
+    r13: '0x00'
+- pc: 10
+  registers:
+    r0: 128
+    r11: 514
+    r12: 138
+    r13: '0x00'
+- pc: 12
+  registers:
+    r0: 128
+    r11: 514
+    r12: 138
+    r13: '0x00'
+- pc: 13
+  registers:
+    r0: 128
+    r10: 1
+    r11: 514
+    r12: 138
+    r13: '0x00'
+- pc: 14
+  registers:
+    r0: 128
+    r10: 1
+    r11: 514
+    r12: 139
+    r13: '0x00'
+- pc: 7
+  registers:
+    r0: 128
+    r10: 1
+    r11: 514
+    r12: 139
+    r13: '0x00'
+- pc: 8
+  registers:
+    r0: 128
+    r10: '!'
+    r11: 514
+    r12: 139
+    r13: '0x00'
+- pc: 9
+  registers:
+    r0: 128
+    r10: '!'
+    r11: 514
+    r12: 139
+    r13: '0x00'
+- pc: 10
+  registers:
+    r0: 128
+    r11: 514
+    r12: 139
+    r13: '0x00'
+- pc: 12
+  registers:
+    r0: 128
+    r11: 514
+    r12: 139
+    r13: '0x00'
+- pc: 13
+  registers:
+    r0: 128
+    r10: 1
+    r11: 514
+    r12: 139
+    r13: '0x00'
+- pc: 14
+  registers:
+    r0: 128
+    r10: 1
+    r11: 514
+    r12: 140
+    r13: '0x00'
+- pc: 7
+  registers:
+    r0: 128
+    r10: 1
+    r11: 514
+    r12: 140
+    r13: '0x00'
+- pc: 8
+  registers:
+    r0: 128
+    r10: '0x00'
+    r11: 514
+    r12: 140
+    r13: '0x00'
+- pc: 9
+  registers:
+    r0: 128
+    r10: '0x00'
+    r11: 514
+    r12: 140
+    r13: '0x00'
+- pc: 10
+  registers:
+    r0: 128
+    r10: 1
+    r11: 514
+    r12: 140
+    r13: '0x00'
+- pc: 11
+  registers:
+    r0: 128
+    r10: 1
+    r11: 514
+    r12: 140
+    r13: '0x00'
+- pc: 15
+  registers:
+    r0: 128
+    r10: 1
+    r11: 514
+    r12: 140
+    r13: '0x00'
+- pc: 16
+  registers:
+    r0: 128
+    r10: 1
+    r11: 514
+    r12: 140
+    r13: 1
+- pc: 17
+  registers:
+    r0: 128
+    r10: 1
+    r11: 514
+    r12: 140
+    r13: 1
+- pc: 18
+  registers:
+    r0: 128
+    r10: 1
+    r11: 514
+    r12: 514
+    r13: 1
+- pc: 19
+  registers:
+    r0: 128
+    r10: 1
+    r12: 514
+    r13: 1
+- pc: 20
+  registers:
+    r0: 128
+    r12: 514
+    r13: 1

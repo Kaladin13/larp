@@ -5,9 +5,7 @@ input: |-
 buffer: |-
   ["m", "a", "k", "s", "i", "m"]
 
-log: &id001
-- output: |
-    maksim
+output:
 - output: |
     maksim
 - pc: 0
@@ -641,4 +639,3 @@ log: &id001
     r0: 256
     r12: 514
     r13: 1
-output: *id001
